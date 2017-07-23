@@ -1,15 +1,7 @@
 #ifndef LCD_H
 #define LCD_H
 
-#include "header.h"
-
-/******************************************************************************
- * Port locations                                                             *
- ******************************************************************************/
-#define LCD_RS 0b00000010 // 0 is instructions, 1 is data
-#define LCD_RW 0b00000100 // 0 is write, 1 is read
-#define LCD_EN 0b00001000
-
+#include <stdint.h>
 
 /******************************************************************************
  * LCD setup                                                                  *
@@ -45,24 +37,40 @@
 
 
 /******************************************************************************
- * LCD instructions                                                           *
+ * default values                                                             *
  ******************************************************************************/
-extern uint8_t SHADOW_A;
-extern lcd_struct lcd;
+#define LCD_STARTUP_SCREEN {{' ', 's','o','l','d','e','r','n','e','r','d','.','c','o','m',' '},{'d','B','-','L','i','n','e','a','r',' ','S','M','e','t','e','r'}}
+#define LCD_DEFAULT_BRIGHTNESS 150
+#define LCD_DEFAULT_CONTRAST 80
 
+
+/******************************************************************************
+ * LCD typedef                                                                *
+ ******************************************************************************/
+/*
+typedef struct
+{
+    uint8_t content[2][16];
+    uint8_t contrast;
+    uint8_t brightness;
+} lcd_t;
+*/
+
+/******************************************************************************
+ * Variable definitions                                                       *
+ ******************************************************************************/
+uint8_t lcd_content[2][16] = LCD_STARTUP_SCREEN;
 
 /******************************************************************************
  * Public functions                                                           *
  ******************************************************************************/
-void lcd_init_4bit();
-void lcd_refresh_all();
-void lcd_off();
-void lcd_on();
-void lcd_read_contrast();
-void lcd_read_brightness();
-void lcd_write_contrast();
+void lcd_setup(void);
+void lcd_init_4bit(void);
+void lcd_refresh_all(void);
+void lcd_off(void);
+void lcd_on(void);
+
 void lcd_set_contrast(uint8_t contrast);
-void lcd_write_brightness();
 void lcd_set_brightness(uint8_t brightness);
 
 

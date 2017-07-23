@@ -36,8 +36,6 @@ unsigned char ToSendDataBuffer[64];
 volatile USB_HANDLE USBOutHandle;    
 volatile USB_HANDLE USBInHandle;
 
-extern calibration_t calibrationParameters[7];
-
 /** DEFINITIONS ****************************************************/
 typedef enum
 {

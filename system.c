@@ -20,6 +20,7 @@ please contact mla_licensing@microchip.com
 #include <xc.h>
 #include "system.h"
 #include "usb.h"
+#include "os.h"
 
 /*
 // CONFIG1L
@@ -232,8 +233,7 @@ void interrupt SYS_InterruptHigh(void)
     #endif
 
     //User-defined ISR
-    //tmr_isr_custom();
-        
+    tmr_isr();   
 }
 #else
     void YourHighPriorityISRCode();
