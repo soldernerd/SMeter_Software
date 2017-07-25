@@ -1,7 +1,18 @@
 #include <xc.h>
 #include "lcd.h"
 #include "os.h"
+#include "i2c.h"
 
+/******************************************************************************
+ * Local variables                                                            *
+ ******************************************************************************/
+typedef struct
+{
+    uint8_t contrast;
+    uint8_t brightness;
+} lcd_t;
+
+lcd_t lcd_config;
 
 /******************************************************************************
  * Static functions                                                           *
@@ -11,6 +22,8 @@ static void _lcd_write_4_bitfixwait(uint8_t type, uint8_t dat);
 static void _lcd_write_4(uint8_t type, uint8_t dat);
 static void _lcd_a_umlaut();
 static void _lcd_wait_while_busy();
+static void _read_configuration();
+static void _write_configuration();
 
 /******************************************************************************
  * Port and pwm setup                                                         *
@@ -59,6 +72,9 @@ void lcd_setup(void)
     LCD_RS_TRIS = PIN_OUTPUT;
     LCD_RS_PIN = 0;
     
+    //Load contrast and brightness from EEPROM
+    _read_configuration();
+    
     //Both CCP modules use timer 2 in PWM mode
     TCLKCONbits.T3CCP2 = 0;
     TCLKCONbits.T3CCP1 = 0;
@@ -79,7 +95,7 @@ void lcd_setup(void)
     //Active high PWM mode
     CCP1CONbits.CCP1M = 0b1100;
     //Duty cycle MSB
-    CCPR1 = LCD_DEFAULT_BRIGHTNESS;
+    CCPR1 = lcd_config.brightness;
     
     //Configure contrast PWM
     //Single output
@@ -89,7 +105,34 @@ void lcd_setup(void)
     //Active high PWM mode
     CCP2CONbits.CCP2M = 0b1100;
     //Duty cycle MSB
-    CCPR2 = LCD_DEFAULT_CONTRAST;    
+    CCPR2 = lcd_config.contrast;    
+}
+
+/******************************************************************************
+ * Read contrast and brightness from EEPROM                                   *
+ ******************************************************************************/
+static void _read_configuration()
+{
+    i2c_eeprom_read(I2C_EEPROM_LCD_CONFIG_ADDRESS, &lcd_config, 2);
+    if(lcd_config.contrast<LCD_MINIMUM_CONTRAST || lcd_config.contrast>LCD_MAXIMUM_CONTRAST)
+    {
+        lcd_config.contrast = LCD_DEFAULT_CONTRAST;
+        lcd_config.brightness = LCD_DEFAULT_BRIGHTNESS;
+        _write_configuration();
+    }
+}
+
+/******************************************************************************
+ * Writes contrast and brightness to EEPROM                                   *
+ ******************************************************************************/
+static void _write_configuration()
+{
+    lcd_t from_eeprom;
+    i2c_eeprom_read(I2C_EEPROM_LCD_CONFIG_ADDRESS, &from_eeprom, 2);
+    if(from_eeprom.contrast!=lcd_config.contrast || from_eeprom.brightness!=lcd_config.brightness)
+    {
+        i2c_eeprom_write(I2C_EEPROM_LCD_CONFIG_ADDRESS, &lcd_config, 2);
+    }
 }
 
 /******************************************************************************
@@ -473,27 +516,6 @@ static void lcd_a_umlaut()
  ******************************************************************************/
 void lcd_init_4bit()
 {
-    //Variable declarations
-    //uint8_t dutycycles[LCD_DUTYCYCLE_COUNT] = LCD_DUTYCYCLE_VALUES;
-    //uint8_t line;
-    //uint8_t character;
-    //Prepare duty cycle array
-    //for(line=0;line<LCD_DUTYCYCLE_COUNT;++line)
-    //{
-    //    lcd.dutycycles[line] = dutycycles[line];
-    //}
-    //Configure Port
-    //TRISA = 0x00;
-    //ANSELA = 0x00;
-    //Configure LCD brightness (PWM1) and contrast (PWM2)
-    //PWM1_Init(5000);
-    //PWM2_Init(5000);
-    //lcd_read_brightness();
-    //lcd_set_brightness(lcd.brightness);
-    //lcd_read_contrast();
-    //lcd_set_contrast(lcd.contrast);
-    //PWM1_Start();
-    //PWM2_Start();
     //Wait
     __delay_ms(10*LCD_STARTUP_TIME1);
     //Initialize LCD display

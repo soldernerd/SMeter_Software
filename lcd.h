@@ -42,6 +42,8 @@
 #define LCD_STARTUP_SCREEN {{' ', 's','o','l','d','e','r','n','e','r','d','.','c','o','m',' '},{'d','B','-','L','i','n','e','a','r',' ','S','M','e','t','e','r'}}
 #define LCD_DEFAULT_BRIGHTNESS 150
 #define LCD_DEFAULT_CONTRAST 80
+#define LCD_MINIMUM_CONTRAST 30
+#define LCD_MAXIMUM_CONTRAST 130
 
 
 /******************************************************************************

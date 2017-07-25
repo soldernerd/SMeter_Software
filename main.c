@@ -48,6 +48,7 @@ MAIN_RETURN main(void)
 {
     //uint8_t cntr;
     uint8_t contrast = 0;
+    uint8_t buffer[16]; 
     
     SYSTEM_Initialize(SYSTEM_STATE_USB_START);
 
@@ -87,6 +88,10 @@ MAIN_RETURN main(void)
                     
                 case 8:
                     APP_DeviceCustomHIDTasks();
+                    break;
+                    
+                case 9:
+                    //i2c_eeprom_read(0x0000, &buffer[0], 2);
                     break;
                     
                 case 11:

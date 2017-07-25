@@ -53,8 +53,9 @@ static void _i2c_send(uint8_t dat)
 
 static uint8_t _i2c_get(void)
 {
-    while(SSP1STATbits.BF==0){}
-    return SSP1BUF;
+    SSP1CON2bits.RCEN = 1 ; //initiate I2C read
+    while(SSP1CON2bits.RCEN){} //wait for read to complete
+    return SSP1BUF; //return the value in the buffer
 }
 
 static void _i2c_stop(void)

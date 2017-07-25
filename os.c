@@ -70,7 +70,7 @@ static void _system_timer0_init(void)
 
 void system_init(void)
 {
-    uint16_t dat;
+    uint8_t dat[2] = {150, 80};
 
     //Set up timer0 for timeSlots
     _system_timer0_init();
@@ -78,8 +78,10 @@ void system_init(void)
     //Set up I2C
     i2c_init();
     
+    //i2c_eeprom_write(0x0000, &dat[0], 2);
+    
     //dat = i2c_eeprom_readByte(0x00);
-    i2c_adc_start(I2C_ADC_RESOLUTION_16BIT, I2C_ADC_GAIN_1);
+    //i2c_adc_start(I2C_ADC_RESOLUTION_16BIT, I2C_ADC_GAIN_1);
 //    __delay_ms(500);
 //    __delay_ms(500);
 //    __delay_ms(500);
