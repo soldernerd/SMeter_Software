@@ -15,9 +15,7 @@ typedef enum
 {
     I2C_ADC_RESOLUTION_12BIT,
     I2C_ADC_RESOLUTION_14BIT,
-    I2C_ADC_RESOLUTION_16BIT,
-    I2C_ADC_RESOLUTION_18BIT
-    
+    I2C_ADC_RESOLUTION_16BIT, 
 } i2cAdcResolution_t;
 
 typedef enum
@@ -32,6 +30,7 @@ typedef enum
 void i2c_init(void);
 
 #define I2C_EEPROM_LCD_CONFIG_ADDRESS 0x0000
+
 
 void i2c_eeprom_writeByte(uint16_t address, uint8_t data);
 uint8_t i2c_eeprom_readByte(uint16_t address);

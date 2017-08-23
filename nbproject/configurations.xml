@@ -25,6 +25,7 @@
       <itemPath>usb_hal.h</itemPath>
       <itemPath>usb_hal_pic18.h</itemPath>
       <itemPath>i2c.h</itemPath>
+      <itemPath>display.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -47,6 +48,7 @@
       <itemPath>os.c</itemPath>
       <itemPath>lcd.c</itemPath>
       <itemPath>i2c.c</itemPath>
+      <itemPath>display.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

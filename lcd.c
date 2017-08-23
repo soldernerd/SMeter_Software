@@ -33,11 +33,15 @@ void lcd_setup(void)
     //Configure ports
     LCD_BACKLIGHT_TRIS = PIN_OUTPUT;
     LCD_BACKLIGHT_PIN = 0;
+    PPSUnLock();
     LCD_BACKLIGHT_PPS = PPS_FUNCTION_CCP1_OUTPUT;
+    PPSLock();
     
     LCD_CONTRAST_TRIS = PIN_OUTPUT;
     LCD_CONTRAST_PIN = 0;
+    PPSUnLock();
     LCD_CONTRAST_PPS = PPS_FUNCTION_CCP2_OUTPUT;
+    PPSLock();
     
     LCD_D0_TRIS = PIN_OUTPUT;
     LCD_D0_PIN = 0;
@@ -489,7 +493,6 @@ static void lcd_write_4bit(uint8_t type, uint8_t dat)
 /******************************************************************************
  * Sets up character "ä" as a custom character                                *
  ******************************************************************************/
-/*
 static void lcd_a_umlaut()
 {
   lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | 0));
@@ -509,7 +512,52 @@ static void lcd_a_umlaut()
   lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | 7));
   lcd_write_4bit(LCD_DATA, 0b00000000);
 }
-*/
+
+/******************************************************************************
+ * Sets up character 1/5 bar chart symbol as a custom character               *
+ ******************************************************************************/
+static void lcd_barcodes()
+{
+    uint8_t cntr;
+    // 1 bar
+    for(cntr=0; cntr<8; ++cntr)
+    {
+        lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | cntr));
+        lcd_write_4bit(LCD_DATA, 0b00010000);
+    }
+    // 2 bars
+    for(cntr=0; cntr<8; ++cntr)
+    {
+        lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR2<<3) | cntr));
+        lcd_write_4bit(LCD_DATA, 0b00011000);
+    }
+    // 3 bars
+    for(cntr=0; cntr<8; ++cntr)
+    {
+        lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR3<<3) | cntr));
+        lcd_write_4bit(LCD_DATA, 0b00011100);
+    }
+    // 4 bars
+    for(cntr=0; cntr<8; ++cntr)
+    {
+        lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR4<<3) | cntr));
+        lcd_write_4bit(LCD_DATA, 0b00011110);
+    }
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 1));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 2));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 3));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 4));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 5));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 6));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 7));
+//    lcd_write_4bit(LCD_DATA, 0b00010000);
+}
 
 /******************************************************************************
  * Initialize LCD display in 4-bit mode                                       *
@@ -545,7 +593,8 @@ void lcd_init_4bit()
     //Turn LCD on
     lcd_write_4bit_fixwait(LCD_INSTRUCTION, LCD_ON);
     //Add 'ä' as a custom character
-    //lcd_a_umlaut();
+    lcd_a_umlaut();
+    lcd_barcodes();
 }
 
 /******************************************************************************

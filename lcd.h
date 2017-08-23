@@ -35,6 +35,18 @@
 #define LCD_ON 0b00001100
 #define LCD_OFF 0b00001000
 
+/******************************************************************************
+ * Custom Characters                                                          *
+ ******************************************************************************/
+#define LCD_CUSTOM_CHARACTER_ae 0x00
+#define LCD_CUSTOM_CHARACTER_oe 0x01
+#define LCD_CUSTOM_CHARACTER_ue 0x02
+#define LCD_CUSTOM_CHARACTER_BAR1 0x03
+#define LCD_CUSTOM_CHARACTER_BAR2 0x04
+#define LCD_CUSTOM_CHARACTER_BAR3 0x05
+#define LCD_CUSTOM_CHARACTER_BAR4 0x06
+#define LCD_CUSTOM_CHARACTER_BAR5 0xFF
+
 
 /******************************************************************************
  * default values                                                             *
@@ -61,7 +73,7 @@ typedef struct
 /******************************************************************************
  * Variable definitions                                                       *
  ******************************************************************************/
-uint8_t lcd_content[2][16] = LCD_STARTUP_SCREEN;
+char lcd_content[2][16] = LCD_STARTUP_SCREEN;
 
 /******************************************************************************
  * Public functions                                                           *
@@ -74,6 +86,7 @@ void lcd_on(void);
 
 void lcd_set_contrast(uint8_t contrast);
 void lcd_set_brightness(uint8_t brightness);
+
 
 
 #endif /* LCD_H */

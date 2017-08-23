@@ -85,6 +85,12 @@ typedef struct
 {
     volatile uint8_t timeSlot;
     volatile uint8_t done;
+    int16_t adc_values[16];
+    int32_t adc_sum;
+    int16_t db_value;
+    uint8_t s_value;
+    uint8_t s_fraction;
+    int32_t calibration[14]; 
 } os_t;
 
 

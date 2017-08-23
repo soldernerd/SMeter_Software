@@ -7,8 +7,6 @@
 #define I2C_WRITE 0x00
 #define I2C_READ 0x01
 
-#define I2C_DISPLAY_SLAVE_ADDRESS 0b01111000
-#define I2C_DIGIPOT_SLAVE_ADDRESS 0b01011100
 #define I2C_ADC_SLAVE_ADDRESS 0b11010000
 #define I2C_EEPROM_SLAVE_ADDRESS 0b10100000
 
@@ -137,7 +135,6 @@ void i2c_adc_start(i2cAdcResolution_t resolution, i2cAdcGain_t gain)
  {
      uint8_t configuration_byte;
      configuration_byte = 0b10000000;
-     //configuration_byte |= (channel<<5);
      configuration_byte |= (resolution<<2);
      configuration_byte |= gain;
      
@@ -147,7 +144,6 @@ void i2c_adc_start(i2cAdcResolution_t resolution, i2cAdcGain_t gain)
  int16_t i2c_adc_read(void)
  {
     int16_t result;
-
     _i2c_wait_idle();
     _i2c_start();
     _i2c_wait_idle();
@@ -159,7 +155,6 @@ void i2c_adc_start(i2cAdcResolution_t resolution, i2cAdcGain_t gain)
     result |= _i2c_get();
     _i2c_not_acknowledge();
     _i2c_stop(); 
-    
     return result;
  };
  
@@ -275,7 +270,6 @@ void i2c_eeprom_read_calibration(void)
                     schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_EXTERNAL_TEMPERATURE_2);
                     break;
             }
-            /*
             addr += 4;
             i2c_eeprom_write(addr, (uint8_t*) &calibrationParameters[cntr], 12);
             //Wait for a while

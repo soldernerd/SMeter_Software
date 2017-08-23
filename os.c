@@ -7,9 +7,9 @@
 //#include "adc.h"
 
 
-//8ms for normal load, 1ms for short load
-#define TIMER0_LOAD_HIGH_48MHZ 0xD1
-#define TIMER0_LOAD_LOW_48MHZ 0x20
+//12ms for normal load, 1ms for short load
+#define TIMER0_LOAD_HIGH_48MHZ 0xB9
+#define TIMER0_LOAD_LOW_48MHZ 0xB0
 #define TIMER0_LOAD_SHORT_HIGH_48MHZ 0xFA
 #define TIMER0_LOAD_SHORT_LOW_48MHZ 0x24
 
@@ -70,29 +70,31 @@ static void _system_timer0_init(void)
 
 void system_init(void)
 {
-    uint8_t dat[2] = {150, 80};
-
     //Set up timer0 for timeSlots
     _system_timer0_init();
     
     //Set up I2C
     i2c_init();
-    
-    //i2c_eeprom_write(0x0000, &dat[0], 2);
-    
-    //dat = i2c_eeprom_readByte(0x00);
-    //i2c_adc_start(I2C_ADC_RESOLUTION_16BIT, I2C_ADC_GAIN_1);
-//    __delay_ms(500);
-//    __delay_ms(500);
-//    __delay_ms(500);
-//    dat = i2c_adc_read();
-    
-    
+
     //Set up LCD and display startup screen
     lcd_setup();
     lcd_init_4bit();
-    lcd_refresh_all();
+    lcd_refresh_all(); 
     
-    
+    //Load calibration
+    os.calibration[0] = 2400 * 2;
+    os.calibration[1] = 7200 * 2;
+    os.calibration[2] = 12000 * 2;
+    os.calibration[3] = 16800 * 2;
+    os.calibration[4] = 21600 * 2;
+    os.calibration[5] = 26400 * 2;
+    os.calibration[6] = 31200 * 2;
+    os.calibration[7] = 36000 * 2;
+    os.calibration[8] = 40800 * 2;
+    os.calibration[9] = 54600 * 2;
+    os.calibration[10] = 50400 * 2;
+    os.calibration[11] = 55200 * 2;
+    os.calibration[12] = 60000 * 2;
+    os.calibration[13] = 64800 * 2;
 }
 
