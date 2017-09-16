@@ -174,22 +174,28 @@ static void _write_configuration()
 /******************************************************************************
  * Adjust contrast                                                            *
  ******************************************************************************/
-//void lcd_set_contrast(uint8_t contrast)
-//{
-//  lcd.contrast = contrast;
-//  contrast *= LCD_CONTRAST_MULTIPLIER;
-//  contrast += LCD_CONTRAST_OFFSET;
-//  PWM2_Set_Duty(contrast);
-//}
+void lcd_set_contrast(uint8_t contrast)
+{
+    if(contrast!=lcd_config.contrast)
+    {
+        lcd_config.contrast = contrast;
+        CCPR2 = lcd_config.contrast;  
+        _write_configuration();
+    }
+}
 
 /******************************************************************************
  * Adjust brightness                                                          *
  ******************************************************************************/
-//void lcd_set_brightness(uint8_t brightness)
-//{
-//  lcd.brightness = brightness;
-//  PWM1_Set_Duty(lcd.dutycycles[brightness]);
-//}
+void lcd_set_brightness(uint8_t brightness)
+{
+    if(brightness!=lcd_config.brightness)
+    {
+        lcd_config.brightness = brightness;
+        CCPR1 = lcd_config.brightness; 
+        _write_configuration();
+    }
+}
 
 /******************************************************************************
  * Wait until LCD display is ready for next instruction                       *
@@ -634,10 +640,12 @@ void lcd_off()
   lcd_write_4bit(LCD_INSTRUCTION, LCD_OFF);
 }
 
-/******************************************************************************
- * Set contrast                                                               *
- ******************************************************************************/
-void lcd_set_contrast(uint8_t contrast)
+uint8_t lcd_get_contrast(void)
 {
-    CCPR2 = contrast;
+    return lcd_config.contrast;
+}
+
+uint8_t lcd_get_brightness(void)
+{
+    return lcd_config.brightness;
 }

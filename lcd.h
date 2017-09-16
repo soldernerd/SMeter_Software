@@ -86,7 +86,7 @@ void lcd_on(void);
 
 void lcd_set_contrast(uint8_t contrast);
 void lcd_set_brightness(uint8_t brightness);
-
-
+uint8_t lcd_get_contrast(void);
+uint8_t lcd_get_brightness(void);
 
 #endif /* LCD_H */

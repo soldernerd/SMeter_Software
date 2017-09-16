@@ -24,6 +24,7 @@ please contact mla_licensing@microchip.com
 #include "system.h"
 
 #include "os.h"
+#include "lcd.h"
 //#include "rtcc.h"
 //#include "display.h"
 //#include "buck.h"
@@ -53,6 +54,9 @@ typedef enum
 
 /** FUNCTIONS ******************************************************/
 static void _fill_buffer_get_status(void);
+static void _parse_command_short(uint8_t cmd);
+static void _parse_command_long(uint8_t cmd, uint8_t data);
+static void _parse_command_calibration(uint8_t cmd, uint8_t item, uint8_t dat1, uint8_t dat2, uint8_t dat3);
 
 /*********************************************************************
 * Function: void APP_DeviceCustomHIDInitialize(void);
@@ -146,7 +150,8 @@ void APP_DeviceCustomHIDTasks()
                     ++idx;
                     break;
                 case 0x40:
-                    //_parse_command_long(ReceivedDataBuffer[idx], ReceivedDataBuffer[idx+1]);
+                    //CCPR1 = ReceivedDataBuffer[idx+1]; 
+                    _parse_command_long(ReceivedDataBuffer[idx], ReceivedDataBuffer[idx+1]);
                     idx += 2;
                     break;
                 case 0x60:
@@ -180,13 +185,83 @@ static void _fill_buffer_get_status(void)
     ToSendDataBuffer[6] = (uint8_t) (os.adc_sum >> 24); //MSB
     ToSendDataBuffer[7] = (uint8_t) os.db_value; //LSB
     ToSendDataBuffer[8] = (uint8_t) (os.db_value >> 8);
-    
-    //ToSendDataBuffer[7] = (uint8_t) 12345; //LSB
-    //ToSendDataBuffer[8] = (uint8_t) (12345 >> 8);
-    
     ToSendDataBuffer[9] = os.s_value;
     ToSendDataBuffer[10] = os.s_fraction;
-    
-    
-    
+    ToSendDataBuffer[11] = lcd_get_brightness();
+    ToSendDataBuffer[12] = lcd_get_contrast();
 }
+
+
+static void _parse_command_short(uint8_t cmd)
+{
+    switch(cmd)
+    {
+        case 0x30:
+            break;
+        case 0x31:
+            break;
+    }
+}
+
+static void _parse_command_long(uint8_t cmd, uint8_t data)
+{
+    switch(cmd)
+    {
+        //Display brightness
+        case 0x40:
+            lcd_set_brightness(data);
+            break;
+        //Display contrast
+        case 0x41: 
+            lcd_set_contrast(data);
+            break;
+    }    
+}
+
+static void _parse_command_calibration(uint8_t cmd, uint8_t item, uint8_t dat1, uint8_t dat2, uint8_t dat3)
+{
+    int16_t parameter = dat1;
+    parameter <<= 8;
+    parameter |= dat2;
+    //Store changes in RAM
+    /*
+    switch(item & 0x0F)
+    {
+        //Offset
+        case 0x00:
+            calibrationParameters[item>>4].Offset = parameter;
+            break;
+        //Slope
+        case 0x01:
+            calibrationParameters[item>>4].Multiplier = parameter;
+            calibrationParameters[item>>4].Shift = dat3;
+            break;
+    }
+    //Schedule changes to be written to EEPROM
+    switch((calibrationIndex_t) item>>4)
+    {
+        case CALIBRATION_INDEX_INPUT_VOLTAGE:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_INPUT_VOLTAGE);
+            break;
+        case CALIBRATION_INDEX_OUTPUT_VOLTAGE:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_OUTPUT_VOLTAGE);
+            break;
+        case CALIBRATION_INDEX_INPUT_CURRENT:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_INPUT_CURRENT);
+            break;
+        case CALIBRATION_INDEX_OUTPUT_CURRENT:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_OUTPUT_CURRENT);
+            break;
+        case CALIBRATION_INDEX_ONBOARD_TEMPERATURE:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_ONBOARD_TEMPERATURE);
+            break;
+        case CALIBRATION_INDEX_EXTERNAL_TEMPERATURE_1:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_EXTERNAL_TEMPERATURE_1);
+            break;
+        case CALIBRATION_INDEX_EXTERNAL_TEMPERATURE_2:
+            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_EXTERNAL_TEMPERATURE_2);
+            break;
+    }
+     * */
+}
+
