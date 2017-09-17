@@ -10,6 +10,8 @@ typedef struct
 {
     uint8_t contrast;
     uint8_t brightness;
+    uint8_t saved_contrast;
+    uint8_t saved_brightness;
 } lcd_t;
 
 lcd_t lcd_config;
@@ -124,6 +126,8 @@ static void _read_configuration()
         lcd_config.brightness = LCD_DEFAULT_BRIGHTNESS;
         _write_configuration();
     }
+    lcd_config.saved_contrast = lcd_config.contrast;
+    lcd_config.saved_brightness = lcd_config.brightness;
 }
 
 /******************************************************************************
@@ -137,6 +141,28 @@ static void _write_configuration()
     {
         i2c_eeprom_write(I2C_EEPROM_LCD_CONFIG_ADDRESS, &lcd_config, 2);
     }
+}
+
+/******************************************************************************
+ * Writes current_contrast and brightness to EEPROM                                   *
+ ******************************************************************************/
+void lcd_save_brightness_contrast(void)
+{
+    if(lcd_config.contrast!=lcd_config.saved_contrast || lcd_config.brightness!=lcd_config.saved_brightness)
+    {
+        i2c_eeprom_write(I2C_EEPROM_LCD_CONFIG_ADDRESS, &lcd_config, 2);
+        lcd_config.saved_contrast = lcd_config.contrast;
+        lcd_config.saved_brightness = lcd_config.brightness;
+    }    
+}
+
+/******************************************************************************
+ * Resets_contrast and brightness to stored values                            *
+ ******************************************************************************/
+void lcd_reset_brightness_contrast(void)
+{
+    lcd_set_contrast(lcd_config.contrast);
+    lcd_set_brightness(lcd_config.brightness);
 }
 
 /******************************************************************************
@@ -176,12 +202,8 @@ static void _write_configuration()
  ******************************************************************************/
 void lcd_set_contrast(uint8_t contrast)
 {
-    if(contrast!=lcd_config.contrast)
-    {
-        lcd_config.contrast = contrast;
-        CCPR2 = lcd_config.contrast;  
-        _write_configuration();
-    }
+    lcd_config.contrast = contrast;
+    CCPR2 = lcd_config.contrast;  
 }
 
 /******************************************************************************
@@ -189,12 +211,8 @@ void lcd_set_contrast(uint8_t contrast)
  ******************************************************************************/
 void lcd_set_brightness(uint8_t brightness)
 {
-    if(brightness!=lcd_config.brightness)
-    {
-        lcd_config.brightness = brightness;
-        CCPR1 = lcd_config.brightness; 
-        _write_configuration();
-    }
+    lcd_config.brightness = brightness;
+    CCPR1 = lcd_config.brightness; 
 }
 
 /******************************************************************************
@@ -648,4 +666,14 @@ uint8_t lcd_get_contrast(void)
 uint8_t lcd_get_brightness(void)
 {
     return lcd_config.brightness;
+}
+
+uint8_t lcd_get_saved_contrast(void)
+{
+    return lcd_config.saved_contrast;
+}
+
+uint8_t lcd_get_saved_brightness(void)
+{
+    return lcd_config.saved_brightness;
 }

@@ -53,9 +53,9 @@
  ******************************************************************************/
 #define LCD_STARTUP_SCREEN {{' ', 's','o','l','d','e','r','n','e','r','d','.','c','o','m',' '},{'d','B','-','L','i','n','e','a','r',' ','S','M','e','t','e','r'}}
 #define LCD_DEFAULT_BRIGHTNESS 150
-#define LCD_DEFAULT_CONTRAST 80
-#define LCD_MINIMUM_CONTRAST 30
-#define LCD_MAXIMUM_CONTRAST 130
+#define LCD_DEFAULT_CONTRAST 40
+#define LCD_MINIMUM_CONTRAST 0
+#define LCD_MAXIMUM_CONTRAST 100
 
 
 /******************************************************************************
@@ -88,5 +88,9 @@ void lcd_set_contrast(uint8_t contrast);
 void lcd_set_brightness(uint8_t brightness);
 uint8_t lcd_get_contrast(void);
 uint8_t lcd_get_brightness(void);
+uint8_t lcd_get_saved_contrast(void);
+uint8_t lcd_get_saved_brightness(void);
+void lcd_save_brightness_contrast(void);
+void lcd_reset_brightness_contrast(void);
 
 #endif /* LCD_H */

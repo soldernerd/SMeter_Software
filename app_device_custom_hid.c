@@ -146,7 +146,7 @@ void APP_DeviceCustomHIDTasks()
             switch(ReceivedDataBuffer[idx] & 0xF0)
             {
                 case 0x30:
-                    //_parse_command_short(ReceivedDataBuffer[idx]);
+                    _parse_command_short(ReceivedDataBuffer[idx]);
                     ++idx;
                     break;
                 case 0x40:
@@ -189,6 +189,8 @@ static void _fill_buffer_get_status(void)
     ToSendDataBuffer[10] = os.s_fraction;
     ToSendDataBuffer[11] = lcd_get_brightness();
     ToSendDataBuffer[12] = lcd_get_contrast();
+    ToSendDataBuffer[13] = lcd_get_saved_brightness();
+    ToSendDataBuffer[14] = lcd_get_saved_contrast();
 }
 
 
@@ -197,8 +199,10 @@ static void _parse_command_short(uint8_t cmd)
     switch(cmd)
     {
         case 0x30:
+            lcd_save_brightness_contrast();
             break;
         case 0x31:
+            lcd_reset_brightness_contrast();
             break;
     }
 }
