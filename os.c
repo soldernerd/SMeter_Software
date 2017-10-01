@@ -82,19 +82,20 @@ void system_init(void)
     lcd_refresh_all(); 
     
     //Load calibration
-    os.calibration[0] = 2400 * 2;
-    os.calibration[1] = 7200 * 2;
-    os.calibration[2] = 12000 * 2;
-    os.calibration[3] = 16800 * 2;
-    os.calibration[4] = 21600 * 2;
-    os.calibration[5] = 26400 * 2;
-    os.calibration[6] = 31200 * 2;
-    os.calibration[7] = 36000 * 2;
-    os.calibration[8] = 40800 * 2;
-    os.calibration[9] = 54600 * 2;
-    os.calibration[10] = 50400 * 2;
-    os.calibration[11] = 55200 * 2;
-    os.calibration[12] = 60000 * 2;
-    os.calibration[13] = 64800 * 2;
+    os.calibration[0] = 4800;
+    os.calibration[1] = 14400;
+    os.calibration[2] = 24000;
+    os.calibration[3] = 33600;
+    os.calibration[4] = 43200;
+    os.calibration[5] = 52800;
+    os.calibration[6] = 62400;
+    os.calibration[7] = 72000;
+    os.calibration[8] = 81600;
+    os.calibration[9] = 91200;
+    os.calibration[10] = 100800;
+    os.calibration[11] = 110400;
+    os.calibration[12] = 120000;
+    os.calibration[13] = 129600;
+
 }
 

@@ -140,6 +140,7 @@ static void _calculate_db_value(void)
             tmp /=  (os.calibration[cntr + 1] - os.calibration[cntr]);
             returnValue += (int16_t) tmp;
             os.db_value = returnValue;
+            return;
         }
     }
 }
@@ -153,6 +154,11 @@ static void _calculate_s_value(void)
     //Calculate S fraction
     tmp = tmp % 600;
     os.s_fraction = (uint8_t) (tmp / 100);
+    while(os.s_value>9)
+    {
+        --os.s_value;
+        os.s_fraction += 6;
+    }
 };
 
 /*******************************************************************************

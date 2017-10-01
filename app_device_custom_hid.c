@@ -150,12 +150,11 @@ void APP_DeviceCustomHIDTasks()
                     ++idx;
                     break;
                 case 0x40:
-                    //CCPR1 = ReceivedDataBuffer[idx+1]; 
                     _parse_command_long(ReceivedDataBuffer[idx], ReceivedDataBuffer[idx+1]);
                     idx += 2;
                     break;
                 case 0x60:
-                    //_parse_command_calibration(ReceivedDataBuffer[idx], ReceivedDataBuffer[idx+1], ReceivedDataBuffer[idx+2], ReceivedDataBuffer[idx+3], ReceivedDataBuffer[idx+4]);
+                    _parse_command_calibration(ReceivedDataBuffer[idx], ReceivedDataBuffer[idx+1], ReceivedDataBuffer[idx+2], ReceivedDataBuffer[idx+3], ReceivedDataBuffer[idx+4]);
                     idx += 5;
                     break;
                 default:
@@ -173,6 +172,7 @@ void APP_DeviceCustomHIDTasks()
 //Fill buffer with general status information
 static void _fill_buffer_get_status(void)
 {
+    uint8_t i;
     //Echo back to the host PC the command we are fulfilling in the first uint8_t
     ToSendDataBuffer[0] = COMMAND_GET_STATUS;
     //Copy entire os struct into buffer
@@ -191,6 +191,13 @@ static void _fill_buffer_get_status(void)
     ToSendDataBuffer[12] = lcd_get_contrast();
     ToSendDataBuffer[13] = lcd_get_saved_brightness();
     ToSendDataBuffer[14] = lcd_get_saved_contrast();
+    //Calibration. 3 bytes each
+    for(i=0; i<14; ++i)
+    {
+        ToSendDataBuffer[3*i+21] = (uint8_t) (os.calibration[i]);
+        ToSendDataBuffer[3*i+22] = (uint8_t) (os.calibration[i] >> 8);
+        ToSendDataBuffer[3*i+23] = (uint8_t) (os.calibration[i] >> 16);  
+    }
 }
 
 
@@ -224,9 +231,20 @@ static void _parse_command_long(uint8_t cmd, uint8_t data)
 
 static void _parse_command_calibration(uint8_t cmd, uint8_t item, uint8_t dat1, uint8_t dat2, uint8_t dat3)
 {
-    int16_t parameter = dat1;
+    int32_t parameter = 0;
+    parameter |= dat1;
     parameter <<= 8;
     parameter |= dat2;
+    parameter <<= 8;
+    parameter |= dat3;
+    
+    switch(cmd)
+    {
+        //Calibration
+        case 0x60:
+            os.calibration[item] = parameter;
+            break;
+    }  
     //Store changes in RAM
     /*
     switch(item & 0x0F)

@@ -8,7 +8,9 @@
             <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/lcd.h</file>
             <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/main.c</file>
             <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/display.c</file>
+            <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/os.h</file>
             <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/app_device_custom_hid.c</file>
+            <file>file:/C:/Users/luke/OneDrive/EmbeddedSystems/MPLAB/SMeter/i2c.c</file>
         </group>
     </open-files>
 </project-private>

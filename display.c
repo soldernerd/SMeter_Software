@@ -160,18 +160,16 @@ void display_prepare()
         //Write S value
         lcd_content[0][11] = 'S';
         _display_itoa((int16_t) (os.s_value), 0, &buffer[0]);
-        cntr = 0;
-        while(buffer[cntr])
-            lcd_content[0][cntr+12] = buffer[cntr++];
-        if(os.s_fraction==0)
+        lcd_content[0][12] = buffer[0];
+        if(os.s_fraction!=0)
         {
-           lcd_content[0][cntr+11] = ' '; 
-        }
-        else
-        {
-            lcd_content[0][cntr+11] = '+';
+            lcd_content[0][13] = '+';
             _display_itoa((int16_t) (os.s_fraction), 0, &buffer[0]);
-            lcd_content[0][cntr+12] = buffer[0];              
+            lcd_content[0][14] = buffer[0]; 
+            if(os.s_fraction>9)
+            {
+                lcd_content[0][15] = buffer[1]; 
+            }       
         }
     }
         
