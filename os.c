@@ -68,20 +68,8 @@ static void _system_timer0_init(void)
     os.timeSlot = 0;
 }
 
-void system_init(void)
+void system_restore_default_calibration(void)
 {
-    //Set up timer0 for timeSlots
-    _system_timer0_init();
-    
-    //Set up I2C
-    i2c_init();
-
-    //Set up LCD and display startup screen
-    lcd_setup();
-    lcd_init_4bit();
-    lcd_refresh_all(); 
-    
-    //Load calibration
     os.calibration[0] = 4800;
     os.calibration[1] = 14400;
     os.calibration[2] = 24000;
@@ -96,6 +84,45 @@ void system_init(void)
     os.calibration[11] = 110400;
     os.calibration[12] = 120000;
     os.calibration[13] = 129600;
+}
 
+void system_load_calibration(void)
+{
+    uint8_t cntr;
+    for(cntr=0; cntr<14; ++cntr)
+    {
+        os.calibration[cntr] = i2c_eeprom_calibration_read(cntr);
+    }
+}
+
+void system_save_calibration(void)
+{
+    int8_t cntr;
+    int32_t tmp;
+    for(cntr=0; cntr<14; ++cntr)
+    {
+        tmp = i2c_eeprom_calibration_read(cntr);
+        if(tmp != os.calibration[cntr]);
+        {
+            i2c_eeprom_calibration_write(os.calibration[cntr], cntr);
+        }
+    }
+}
+
+void system_init(void)
+{
+    //Set up timer0 for timeSlots
+    _system_timer0_init();
+    
+    //Set up I2C
+    i2c_init();
+
+    //Set up LCD and display startup screen
+    lcd_setup();
+    lcd_init_4bit();
+    lcd_refresh_all(); 
+    
+    //Load calibration data
+    system_load_calibration();
 }
 

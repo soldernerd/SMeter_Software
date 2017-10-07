@@ -76,6 +76,11 @@ MAIN_RETURN main(void)
             //Run periodic tasks
             switch(os.timeSlot&0b00001111)
             {       
+                case 13:
+                    //Save calibration to eeprom in case something has changed
+                    system_save_calibration();
+                    break;
+                    
                 case 14:
                     _calculate_adc_sum();
                     _calculate_db_value();

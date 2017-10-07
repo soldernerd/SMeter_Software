@@ -109,5 +109,9 @@ os_t os;
 void tmr_isr(void);
 void system_init(void);
 
+void system_restore_default_calibration(void);
+void system_load_calibration(void);
+void system_save_calibration(void);
+
 #endif	/* OS_H */
 

@@ -166,38 +166,6 @@ void lcd_reset_brightness_contrast(void)
 }
 
 /******************************************************************************
- * Read contrast from EEPROM                                                  *
- ******************************************************************************/
-//void lcd_read_contrast()
-//{
-//  lcd.contrast = eeprom_read(LCD_CONTRAST_EEPROM_ADDRESS);
-//}
-
-/******************************************************************************
- * Read brightness from EEPROM                                                *
- ******************************************************************************/
-//void lcd_read_brightness()
-//{
-//  lcd.brightness = eeprom_read(LCD_BRIGHTNESS_EEPROM_ADDRESS);
-//}
-
-/******************************************************************************
- * Write contrast to EEPROM                                                   *
- ******************************************************************************/
-//void lcd_write_contrast()
-//{
-//  eeprom_write(LCD_CONTRAST_EEPROM_ADDRESS, lcd.contrast);
-//}
-
-/******************************************************************************
- * Write brightness to EEPROM                                                 *
- ******************************************************************************/
-//void lcd_write_brightness()
-//{
-//  eeprom_write(LCD_BRIGHTNESS_EEPROM_ADDRESS, lcd.brightness);
-//}
-
-/******************************************************************************
  * Adjust contrast                                                            *
  ******************************************************************************/
 void lcd_set_contrast(uint8_t contrast)
@@ -215,25 +183,6 @@ void lcd_set_brightness(uint8_t brightness)
     CCPR1 = lcd_config.brightness; 
 }
 
-/******************************************************************************
- * Wait until LCD display is ready for next instruction                       *
- ******************************************************************************/
-//void lcd_wait_while_busy()
-//{
-//  uint8_t shadow_save = SHADOW_A;
-//  TRISA = 0b11110000; //configure D7:D4 as inputs
-//  SHADOW_A = LCD_RW; //read
-//  PORTA = SHADOW_A;
-//  SHADOW_A |= LCD_EN; //EN high
-//  PORTA = SHADOW_A;
-//  while(PORTA & 0b10000000)
-//  {
-//    delay_us(1);
-//  }
-//  SHADOW_A = shadow_save;
-//  PORTA = SHADOW_A;
-//  TRISA = 0x00; //configure D7:D4 as outputs
-//}
 
 /******************************************************************************
  * Write to LCD                                                               * 
@@ -256,14 +205,6 @@ static void lcd_write_8bit_fixwait(uint8_t type, uint8_t dat)
     LCD_RW_PIN = 0; //write
     LCD_E_PIN = 0; // EN low
     //Set up data
-    //LCD_D0_PIN = dat & 0b00000001;
-    //LCD_D1_PIN = dat & 0b00000010;
-    //LCD_D2_PIN = dat & 0b00000100;
-    //LCD_D3_PIN = dat & 0b00001000;
-    //LCD_D4_PIN = dat & 0b00010000;
-    //LCD_D5_PIN = dat & 0b00100000;
-    //LCD_D6_PIN = dat & 0b01000000;
-    //LCD_D7_PIN = dat & 0b10000000;
     LCD_D7_PIN = (dat>>7) & 0b1;
     LCD_D6_PIN = (dat>>6) & 0b1;
     LCD_D5_PIN = (dat>>5) & 0b1;
@@ -337,7 +278,6 @@ static void lcd_write_8bit_fixwait(uint8_t type, uint8_t dat)
 static void lcd_write_4bit_fixwait(uint8_t type, uint8_t dat)
 {
     //Set up RS, RW, EN
-    //LCD_RS_PIN = (type==LCD_DATA); // high for data, low for instruction
     if(type==LCD_DATA)
     {
       LCD_RS_PIN = 1; //data
@@ -349,10 +289,6 @@ static void lcd_write_4bit_fixwait(uint8_t type, uint8_t dat)
     LCD_RW_PIN = 0; //write
     LCD_E_PIN = 0; // EN low
     //Set up first nibble
-    //LCD_D4_PIN = dat & 0b00010000;
-    //LCD_D5_PIN = dat & 0b00100000;
-    //LCD_D6_PIN = dat & 0b01000000;
-    //LCD_D7_PIN = dat & 0b10000000;
     LCD_D7_PIN = (dat>>7) & 0b1;
     LCD_D6_PIN = (dat>>6) & 0b1;
     LCD_D5_PIN = (dat>>5) & 0b1;
@@ -368,10 +304,6 @@ static void lcd_write_4bit_fixwait(uint8_t type, uint8_t dat)
     //Wait
     __delay_us(10*LCD_EXECUTION_TIME_SHORT);
     //Set up second nibble
-    //LCD_D4_PIN = dat & 0b00000001;
-    //LCD_D5_PIN = dat & 0b00000010;
-    //LCD_D6_PIN = dat & 0b00000100;
-    //LCD_D7_PIN = dat & 0b00001000;
     LCD_D7_PIN = (dat>>3) & 0b1;
     LCD_D6_PIN = (dat>>2) & 0b1;
     LCD_D5_PIN = (dat>>1) & 0b1;
@@ -567,20 +499,6 @@ static void lcd_barcodes()
         lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR4<<3) | cntr));
         lcd_write_4bit(LCD_DATA, 0b00011110);
     }
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 1));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 2));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 3));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 4));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 5));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 6));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
-//    lcd_write_4bit(LCD_INSTRUCTION, (LCD_SET_CGRAM_ADDRESS | (LCD_CUSTOM_CHARACTER_BAR1<<3) | 7));
-//    lcd_write_4bit(LCD_DATA, 0b00010000);
 }
 
 /******************************************************************************

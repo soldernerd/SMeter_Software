@@ -40,16 +40,8 @@ volatile USB_HANDLE USBInHandle;
 /** DEFINITIONS ****************************************************/
 typedef enum
 {
-    //These are commands from the Microchip USB HID demo, leave them in place for compatibility
-    COMMAND_TOGGLE_LED = 0x80,
-    COMMAND_GET_BUTTON_STATUS = 0x81,
-    COMMAND_READ_POTENTIOMETER = 0x37,
     //These commands are specific to this application
     COMMAND_GET_STATUS = 0x10,
-    COMMAND_GET_DISPLAY_1 = 0x11,
-    COMMAND_GET_DISPLAY_2 = 0x12,
-    COMMAND_GET_CALIBRATION_1 = 0x13,
-    COMMAND_GET_CALIBRATION_2 = 0x14
 } CUSTOM_HID_DEMO_COMMANDS;
 
 /** FUNCTIONS ******************************************************/
@@ -211,6 +203,9 @@ static void _parse_command_short(uint8_t cmd)
         case 0x31:
             lcd_reset_brightness_contrast();
             break;
+        case 0x32:
+            system_restore_default_calibration();
+            break;
     }
 }
 
@@ -245,45 +240,5 @@ static void _parse_command_calibration(uint8_t cmd, uint8_t item, uint8_t dat1, 
             os.calibration[item] = parameter;
             break;
     }  
-    //Store changes in RAM
-    /*
-    switch(item & 0x0F)
-    {
-        //Offset
-        case 0x00:
-            calibrationParameters[item>>4].Offset = parameter;
-            break;
-        //Slope
-        case 0x01:
-            calibrationParameters[item>>4].Multiplier = parameter;
-            calibrationParameters[item>>4].Shift = dat3;
-            break;
-    }
-    //Schedule changes to be written to EEPROM
-    switch((calibrationIndex_t) item>>4)
-    {
-        case CALIBRATION_INDEX_INPUT_VOLTAGE:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_INPUT_VOLTAGE);
-            break;
-        case CALIBRATION_INDEX_OUTPUT_VOLTAGE:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_OUTPUT_VOLTAGE);
-            break;
-        case CALIBRATION_INDEX_INPUT_CURRENT:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_INPUT_CURRENT);
-            break;
-        case CALIBRATION_INDEX_OUTPUT_CURRENT:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_OUTPUT_CURRENT);
-            break;
-        case CALIBRATION_INDEX_ONBOARD_TEMPERATURE:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_ONBOARD_TEMPERATURE);
-            break;
-        case CALIBRATION_INDEX_EXTERNAL_TEMPERATURE_1:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_EXTERNAL_TEMPERATURE_1);
-            break;
-        case CALIBRATION_INDEX_EXTERNAL_TEMPERATURE_2:
-            schedule_eeprom_write_task(EEPROM_WRITE_TASK_CALIBRATION_EXTERNAL_TEMPERATURE_2);
-            break;
-    }
-     * */
 }
 
