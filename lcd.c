@@ -45,17 +45,19 @@ void lcd_setup(void)
     LCD_CONTRAST_PPS = PPS_FUNCTION_CCP2_OUTPUT;
     PPSLock();
     
-    LCD_D0_TRIS = PIN_OUTPUT;
-    LCD_D0_PIN = 0;
-    
-    LCD_D1_TRIS = PIN_OUTPUT;
-    LCD_D1_PIN = 0;
-    
-    LCD_D2_TRIS = PIN_OUTPUT;
-    LCD_D2_PIN = 0;
-    
-    LCD_D3_TRIS = PIN_OUTPUT;
-    LCD_D3_PIN = 0;
+    #ifdef REVISION_A
+        LCD_D0_TRIS = PIN_OUTPUT;
+        LCD_D0_PIN = 0;
+
+        LCD_D1_TRIS = PIN_OUTPUT;
+        LCD_D1_PIN = 0;
+
+        LCD_D2_TRIS = PIN_OUTPUT;
+        LCD_D2_PIN = 0;
+
+        LCD_D3_TRIS = PIN_OUTPUT;
+        LCD_D3_PIN = 0;
+    #endif /*REVISION_A*/
     
     LCD_D4_TRIS = PIN_OUTPUT;
     LCD_D4_PIN = 0;

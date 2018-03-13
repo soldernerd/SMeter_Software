@@ -29,6 +29,14 @@
 #define PIN_DIGITAL         1
 #define PIN_ANALOG          0
 
+#define REVISION_B
+
+#define I2C_SDA_TRIS TRISBbits.TRISB3
+#define I2C_SDA_PIN LATBbits.LATB3
+
+#define I2C_SCL_TRIS TRISBbits.TRISB4
+#define I2C_SCL_PIN LATBbits.LATB4
+
 #define LCD_BACKLIGHT_TRIS TRISCbits.TRISC2
 #define LCD_BACKLIGHT_PIN LATCbits.LATC2
 #define LCD_BACKLIGHT_PPS RPOR13
@@ -36,30 +44,6 @@
 #define LCD_CONTRAST_TRIS TRISCbits.TRISC7
 #define LCD_CONTRAST_PIN LATCbits.LATC7
 #define LCD_CONTRAST_PPS RPOR18
-
-#define LCD_D0_TRIS TRISBbits.TRISB3
-#define LCD_D0_PIN LATBbits.LATB3
-
-#define LCD_D1_TRIS TRISAbits.TRISA0
-#define LCD_D1_PIN LATAbits.LATA0
-
-#define LCD_D2_TRIS TRISAbits.TRISA1
-#define LCD_D2_PIN LATAbits.LATA1
-
-#define LCD_D3_TRIS TRISAbits.TRISA2
-#define LCD_D3_PIN LATAbits.LATA2
-
-#define LCD_D4_TRIS TRISAbits.TRISA3
-#define LCD_D4_PIN LATAbits.LATA3
-
-#define LCD_D5_TRIS TRISAbits.TRISA5
-#define LCD_D5_PIN LATAbits.LATA5
-
-#define LCD_D6_TRIS TRISCbits.TRISC0
-#define LCD_D6_PIN LATCbits.LATC0
-
-#define LCD_D7_TRIS TRISCbits.TRISC1
-#define LCD_D7_PIN LATCbits.LATC1
 
 #define LCD_E_TRIS TRISBbits.TRISB2
 #define LCD_E_PIN LATBbits.LATB2
@@ -70,11 +54,51 @@
 #define LCD_RS_TRIS TRISBbits.TRISB0
 #define LCD_RS_PIN LATBbits.LATB0
 
-#define I2C_SDA_TRIS TRISBbits.TRISB3
-#define I2C_SDA_PIN LATBbits.LATB3
+#ifdef REVISION_A
 
-#define I2C_SCL_TRIS TRISBbits.TRISB4
-#define I2C_SCL_PIN LATBbits.LATB4
+    #define LCD_D0_TRIS TRISBbits.TRISB3
+    #define LCD_D0_PIN LATBbits.LATB3
+
+    #define LCD_D1_TRIS TRISAbits.TRISA0
+    #define LCD_D1_PIN LATAbits.LATA0
+
+    #define LCD_D2_TRIS TRISAbits.TRISA1
+    #define LCD_D2_PIN LATAbits.LATA1
+
+    #define LCD_D3_TRIS TRISAbits.TRISA2
+    #define LCD_D3_PIN LATAbits.LATA2
+
+    #define LCD_D4_TRIS TRISAbits.TRISA3
+    #define LCD_D4_PIN LATAbits.LATA3
+
+    #define LCD_D5_TRIS TRISAbits.TRISA5
+    #define LCD_D5_PIN LATAbits.LATA5
+
+    #define LCD_D6_TRIS TRISCbits.TRISC0
+    #define LCD_D6_PIN LATCbits.LATC0
+
+    #define LCD_D7_TRIS TRISCbits.TRISC1
+    #define LCD_D7_PIN LATCbits.LATC1
+
+#endif /*REVISION_A*/
+
+#ifdef REVISION_B
+
+    #define LCD_D4_TRIS TRISAbits.TRISA1
+    #define LCD_D4_PIN LATAbits.LATA1
+
+    #define LCD_D5_TRIS TRISAbits.TRISA0
+    #define LCD_D5_PIN LATAbits.LATA0
+
+    #define LCD_D6_TRIS TRISAbits.TRISA3
+    #define LCD_D6_PIN LATAbits.LATA3
+
+    #define LCD_D7_TRIS TRISAbits.TRISA2
+    #define LCD_D7_PIN LATAbits.LATA2
+
+#endif /*REVISION_B*/
+
+
 
 
 /*
